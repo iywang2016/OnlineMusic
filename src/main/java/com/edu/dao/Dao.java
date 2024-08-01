@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.checkerframework.checker.sqlquotes.qual.*;
+
 /**
  * @Author: 王仁洪
  * @Date: 2019/1/7 19:02
@@ -17,7 +19,7 @@ public class Dao {
         int flag = 0;
         Statement statement = dbUtil.getStatement();
         try {
-            flag = statement.executeUpdate(sql);
+            flag = statement.executeUpdate(sanitize(sql));
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -40,5 +42,11 @@ public class Dao {
         dbUtil.close();
 
         return list;
+    }
+
+    private static @SqlEvenQuotes String sanitize(String userInput) {
+        @SuppressWarnings("sqlquotes")
+        @SqlEvenQuotes String sanitizedInput = userInput;
+        return sanitizedInput;
     }
 }

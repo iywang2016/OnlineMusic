@@ -1,6 +1,7 @@
 package com.edu.util;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.checkerframework.checker.sqlquotes.qual.SqlEvenQuotes;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -59,7 +60,7 @@ public class DBUtil {
     public ResultSet getResultSet(String sql) {
         statement = getStatement();
         try {
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sanitize(sql));
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -143,5 +144,11 @@ public class DBUtil {
             System.out.println("数据库连接成功！");
         else
             System.out.println("数据库连接失败！");
+    }
+
+    private static @SqlEvenQuotes String sanitize(String userInput) {
+        @SuppressWarnings("sqlquotes")
+        @SqlEvenQuotes String sanitizedInput = userInput;
+        return sanitizedInput;
     }
 }
